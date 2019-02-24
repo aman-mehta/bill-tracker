@@ -73,7 +73,7 @@ export class BillsPage {
 
   async presentToast(data) {
     const toast = await this.toastController.create({
-      message: data.name + ' bill added!',
+      message: data.name + ' bill saved!',
       color: 'dark',
       showCloseButton: true,
       position: 'bottom',
@@ -82,5 +82,52 @@ export class BillsPage {
     });
 
     await toast.present();
+  }
+
+  async editBill(bill) {
+    const alert = await this.alertController.create({
+      header: 'Edit Bill',
+      inputs: [
+        {
+          name: 'name',
+          type: 'text',
+          value: bill.name,
+          placeholder: 'name'
+        },
+        {
+          name: 'amount',
+          type: 'number',
+          value: bill.amount,
+          placeholder: 'amount'
+        },
+        {
+          name: 'rate',
+          type: 'text',
+          value: bill.rate,
+          placeholder: 'weekly'
+        }
+      ],
+      buttons: [
+        {
+          text: 'Save',
+          handler: (data) => {
+            const index = this.bills.indexOf(bill);
+            if (index > -1) {
+              this.bills[index] = data;
+            }
+            this.presentToast(data);
+          }
+        }, 
+        'Cancel']
+    });
+
+    await alert.present();
+  }
+
+  async deleteBill(bill) {
+    const index = this.bills.indexOf(bill);
+    if (index > -1) {
+      this.bills.splice(index, 1);
+    }
   }
 }
